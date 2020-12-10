@@ -128,7 +128,12 @@ class Job(object):
 
         # dependency could be job instance or id
         if depends_on is not None:
-            job._dependency_ids = [depends_on.id if isinstance(depends_on, Job) else depends_on]
+            if isinstance(depends_on, list):
+                job._dependency_ids = []
+                for dep in depends_on:
+                    job._dependency_ids.append(dep.id if isinstance(dep, Job) else dep)
+            else:
+                job._dependency_ids = [depends_on.id if isinstance(depends_on, Job) else depends_on]
         return job
 
     def get_position(self):
